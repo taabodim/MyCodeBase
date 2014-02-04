@@ -1,0 +1,39 @@
+set up your ubuntu enviornment for c++ and java
+
+sudo apt-get install eclipse eclipse-cdt
+sudo apt-get install qpidd qpid-tools
+
+to install APR
+
+sudo ./configure
+sudo make
+sudo make install
+
+to install boost 
+sudo apt-get install libboost-all-dev
+
+download util-linux-2.24.rc1 from this site 
+https://www.kernel.org/pub/linux/utils/util-linux/v2.24/
+
+cmake .
+sudo make
+sudo make install
+
+
+sudo apt-get install ruby1.9.1-full
+sudo apt-get install libncurses5-dev
+
+sudo apt-get install libparted-devcmake
+
+after installing all these uui libraries,
+delete the qpid source and extract it again from a fresh file
+and run cmake . , it will run, also make sure you have the uuid.h and other related files
+in /usr/include/uuid/
+
+download the qpid-0.24 and go to cpp and 
+run 
+cmake .
+make install
+
+
+add these to the include path /usr/local/include/

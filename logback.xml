@@ -1,0 +1,14 @@
+  <appender name="taabodiAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+          <file>/logs/taabodi.log</file>
+          <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+          <fileNamePattern>/logs/taabodi.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+          <maxHistory>1</maxHistory>
+           </rollingPolicy>
+           <encoder>
+           <pattern>%d{"dd-MM-yyyy HH:mm:ss,SSS"} %-5p [%t]: %msg%n</pattern>
+           <immediateFlush>false</immediateFlush>
+           </encoder>
+           </appender>
+           <logger name="taabodi" additivity="false" level="DEBUG">
+           <appender-ref ref="taabodiAppender"/>
+        </logger>

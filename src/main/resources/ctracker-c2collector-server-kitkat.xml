@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+           http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
+
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:cprocessor-click-queue.properties</value>
+                <value>classpath:ctracker-collector.properties</value>
+                <value>classpath:ctracker-rabbit.properties</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <rabbit:connection-factory id="connectionFactory" channel-cache-size="25"/>
+
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"/>
+
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <!--<rabbit:queue name="${ampx.capping.click.queue}"/>-->
+
+    <rabbit:queue name="${ampx.ctracker.com.admarketplace.collector.listener.queue}"/>
+
+
+    <!--<topic-exchange name="app.stock.marketdata"-->
+    <!--xmlns="http://www.springframework.org/schema/rabbit">-->
+    <!--<bindings>-->
+    <!--<binding queue="${ampx.ctracker.com.admarketplace.collector.listener.queue}" pattern="${ampx.ctracker.com.admarketplace.collector.request.pattern}"/>-->
+    <!--</bindings>-->
+    <!--</topic-exchange>-->
+
+
+    <rabbit:listener-container connection-factory="connectionFactory" concurrency="10">
+        <rabbit:listener queues="${ampx.ctracker.com.admarketplace.collector.listener.queue}" ref="kitkatListener"
+                         method="handleMessage"/>
+    </rabbit:listener-container>
+
+
+    <bean name="kitkatListener" class="com.admarketplace.collector.handlers.KitkatListener"/>
+    <bean name="kitkatCollectorService" class="com.admarketplace.collector.server.KitkatCollectorService">
+        <property name="template">
+            <ref bean="amqpTemplate"/>
+        </property>
+        <property name="queueName" value="${ampx.ctracker.com.admarketplace.collector.listener.queue}" />
+    </bean>
+
+
+</beans>

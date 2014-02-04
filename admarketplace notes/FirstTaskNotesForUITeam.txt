@@ -1,0 +1,85 @@
+First UI Task
+
+the logtargetValue id that the front end is passing us is the 
+filter group id so its between 1 to 12 …. tell pinkel to pass group id with this param 
+
+
+
+commit regarding Task UI Backend services  IM-76  //commit with comments
+
+ask pinkel to pass you the rows and logTargetValueId variables
+
+ActionLogProcessor 
+ActionLogProcessorImpl //this is the 3d implementation of the functionality already   getSearchActionLogData 
+ActionLogDAO
+ActionLogDAOJdbcImpl  // this is the component that fetches data from db
+
+
+APIActionLogService
+ClickFiltersProcessor //putting 
+
+ClickFiltersService  .  getClickFiltersSearchActionLog()  //UI sends requests to this component 
+ClickFiltersProcessorImpl ,,,,, getClickFiltersSearchActionLog(SearchLogParams params) //gets called when the rest method is called
+LogActionHistoryLogger ,,,,ahLogger.  getSearchActionLog(params.getSearchtext(),accountId, lrp); // the ClickFiltersProcessorImpl calls this 
+ActionLogDAOJdbcImpl ,,,,, actionLogDao.  getSearchActionLog // this is where query is created and data is fetched…
+
+
+XmlPublisherReportingUtils  generateSQLAmpFilters()   look at this class to see how to set filters
+TSRonCampaignReportingProcessorImpl  look at this class to see how to set filters
+TrendChart3DProcessorUtils there are some AMPFilter rule here
+
+
+CampaignMetricsDAOVerticaImpl look here for the dynamic query example ..CampaignMetricsDAO.xml
+look closely at this function getCacheData(BaseReportDAOParams params) ( always use BaseReportDAOParams for creating dynamic query)
+String sql = FilterUtils.formatSqlString(selectCachedCampaignMetrics, params.getAmpFilter(), params.getGroupByFields(), lsParams); //this line creates the dynamic query based on params
+
+look that this class QueryTermReportProcessorImpl  in this line BaseReportDAOParams brp = new BaseReportDAOParams(); 
+and see how baseReportDAOParams is created for the dynamic query
+ 
+
+
+https://localhost:8443/rest_services/clickfilters/get/actionlogs?dateRangeType=2&customRange=%7B%22list%22%3A%5B%7B%22from%22%3A%222013-10-03+00%3A00%3A00%22%2C%22to%22%3A%222013-10-03+23%3A59%3A59%22%2C%22order%22%3A1%7D%5D%7D
+
+
+
+
+
+search only by  date (make sure you always pass Application id =13 in the query to get the data for inventory manager only)
+search only date and search text
+search by date,search text and filter group id
+search by date and filter group id type ( in the database column this is called LOG_ACTION_TARGET_TYPE_ID =28 )
+
+,
+   LOG_ACTION_TARGET_TYPE+(and (filter group id value is stored as LOG_ACTION_TARGET_VALUE (this is passed by front end and it is in BaseReportServiceParams.id )  in this table ACTION_LOG_HISTORY)
+
+
+put these in the filter ===>(LOG_ACTION_TARGET_TYPE_ID =28   LOG_ACTION_TARGET_VALUE ==front end will pass this to us)
+
+ActionLogDAO.xml should be changed across all the projects….(it's important)
+
+change the values of data with application_id =13 ( change the column values of  LOG_ACTION_TARGET_TYPE_ID = 28
+and LOG_ACTION_TARGET_TYPE_VALUE to some random value)  //done
+
+
+${db.audit}.ACTION_LOG_HISTORY
+
+
+
+
+
+https://localhost:8443/rest_services/clickfilters/get/actionlogs
+SearchLogParams // is passed around
+APIActionLogService // transforms SearchLogParams in the right way
+null::mtaabodi::Role builder for null not found
+CF: Confirmed user ID mtaabodi/null
+
+
+Amp user: Mahmoud Taabodi (mtaabodi) does not have an assigned Salesforce username!
+
+export JAVA_HOME=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/
+export PATH=$JAVA_HOME:$PATH
+
+https://localhost:8443/amp_manager/filters_management_3d.html
+Rest call for my method
+
+https://localhost:8443/rest_services/clickfilters/get/actionlogs?dateRangeType=2&searchtext=bid&customRange=%7B%22list%22%3A%5B%7B%22from%22%3A%222013-10-04+00%3A00%3A00%22%2C%22to%22%3A%222013-10-04+23%3A59%3A59%22%2C%22order%22%3A1%7D%5D%7D&page=1&logTargetValueId=10&rows=10

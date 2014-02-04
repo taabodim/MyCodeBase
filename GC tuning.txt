@@ -1,0 +1,67 @@
+# try 1 
+
+the CPU usage  for this configuration fluctuates between 40 and 80 percents.
+GC activity was low  all the time in this try.
+this GC setting let the memory grow to 15 G and then does a full(maybe!)  GC and collects about 5 Gigabytes of data each time.
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m -XX:+UseParNewGC   -XX:+UseConcMarkSweepGC  -XX:ConcGCThreads=4 -XX:ParallelGCThreads=16 -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false "
+
+
+
+#try2 
+
+this GC is more aggressive than try 1 
+there have been high GC spikes every 5 minutes under load..
+CPU usage is mostly between 20 and 60 percents.
+Targeting averge seems to be lower for this GC comparing with try1.
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m -XX:InitiatingHeapOccupancyPercent=0  -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false "
+
+
+
+#try 3
+
+#G1 GC
+
+this GC is more aggressive than the other two tries. it tries harder to collect the garbages.
+performance is the same as others. it keeps the memory lower for a longer period of time than other GCs.
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=5  -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false "
+
+
+#try4
+This GC is not as crazy active as G1, its not recommended, the memory reaches to close to 16G after only five minutes...and then the long pausing full GC kicks in.
+ 
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m  -XX:+UseParallelGC -XX:+UseParallelOldGC  -XX:ConcGCThreads=16 -XX:ParallelGCThreads=8 -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Xloggc:/home/mtaabodi/gcdetails.file "
+
+
+
+#try5
+This GC is not as crazy active as G1,nd then the long pausing full GC kicks in.
+#increasing the number of threads to 24
+
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m  -XX:+UseParallelGC -XX:+UseParallelOldGC  -XX:ConcGCThreads=24 -XX:ParallelGCThreads=24 -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Xloggc:/home/mtaabodi/gcdetails.file "
+
+
+#try5
+#increasing the number of threads to 24 , adding the initiate percentage  = 1
+# it seems the app is performing very well with this GC, the Targeting latency is mostly around 7 milis for this app.
+you will see some GC spikes but there not many. CPU usage is around 40% and 60% , the average targeting latency 
+goes reaches around 16, after the full GC, but for the next thousands request  avg goes back to 7 milis.
+  
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m  -XX:+UseParallelGC -XX:InitiatingHeapOccupancyPercent=1 -XX:+UseParallelOldGC  -XX:ConcGCThreads=24 -XX:ParallelGCThreads=24 -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Xloggc:/home/mtaabodi/gcdetails.file "
+
+
+#try 6 
+this GC will keep the memory under controll very effectively , better than all of the other options. but the 
+latency is in average 11 seconds... compared to 7 second of parallel GC
+
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m  -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing  -XX:+UseConcMarkSweepGC  -XX:ConcGCThreads=16  -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false "
+
+
+
+#try7 
+setting G1 threads to 4 to control the hyper activity of G1
+
+CATALINA_OPTS="-server -Xms16384m -Xmx16384m -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=5  -XX:ConcGCThreads=4 XX:ParallelGCThreads=4 -Dcom.sun.management.jmxremote.port=9003 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false "
+
+
+
+

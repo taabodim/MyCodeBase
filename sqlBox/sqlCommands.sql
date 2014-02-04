@@ -1,0 +1,85 @@
+UPDATE audit.ACTION_LOG_HISTORY SET HISTORY_DATETIME='2013-10-03 12:10:05' WHERE AMP_USER_NAME='admin_eric';
+UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_TYPE_ID=28  WHERE AMP_USER_NAME='admin_eric';
+UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=-1  WHERE AMP_USER_NAME='admin_eric';
+UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=0  WHERE AMP_USER_NAME='admin_eric';
+
+
+select * from audit.ACTION_LOG_HISTORY log 
+				 	where HISTORY_DATA like '%NORBERT%'
+					LIMIT 10
+					OFFSET 10
+ SELECT count(ID) FROM
+		 adminDB_Prod.FILTER_SETTINGS_V4
+		 WHERE
+		    FILTER_ID=0 and
+				FEED_ID=0 and
+				TRAFFIC_SOURCE_ID=0 and
+				PUBLISHER_ID=0 and
+				DEVICE_GROUP_ID=0 and 
+				DEVICE_SUBTYPE_ID=0 and
+				PUBLISHER_SUBTYPE_ID=0 and
+				CAMPAIGN_ID=0	and
+				ADVERTISER IS NULL
+				 and sub1='travelDark'
+				 
+				 UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=-1  WHERE AMP_USER_NAME='admin_eric';
+				 UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=-1  WHERE AMP_USER_NAME='mtaabodi';
+				 
+				 
+				 
+				UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=99999 where APPLICATION_ID=13;
+
+
+				SELECT count(ID) FROM
+		 adminDB_Prod.FILTER_SETTINGS_V4
+		 WHERE
+		    FILTER_ID=0 and
+				FEED_ID=0 and
+				TRAFFIC_SOURCE_ID=0 and
+				PUBLISHER_ID=0 and
+				DEVICE_GROUP_ID=0 and 
+				DEVICE_SUBTYPE_ID=0 and
+				PUBLISHER_SUBTYPE_ID=0 and
+				CAMPAIGN_ID=0	and
+				ADVERTISER IS NULL
+				 and sub1='travelDark'
+				 
+				 UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=-1  WHERE AMP_USER_NAME='admin_eric';
+				 UPDATE audit.ACTION_LOG_HISTORY SET LOG_ACTION_TARGET_VALUE=-1  WHERE AMP_USER_NAME='mtaabodi';
+				  
+				  
+				  
+		UPDATE audit.ACTION_LOG_HISTORY SET HISTORY_DATETIME='2013-10-03 23:59:59' WHERE AMP_USER_NAME='mtaabodi' && APPLICATION_ID=13;
+		
+		
+select
+				   log.ID,
+				   log.HISTORY_DATETIME,
+				   log.AMP_USER_ID,
+				   coalesce(au.USERNAME, "Unknown User") AMP_USER_NAME,
+				   coalesce(au.DISPLAY_NAME, "Unknown User") AMP_USER_DISPLAY_NAME,
+				   log.APPLICATION_ID,
+				   log.LOG_ACTION_TYPE_ID,
+				   log.ACTION_LOG_UNDO_SERVICE_ID,
+				   log.LOG_ACTION_TARGET_TYPE_ID,
+				   log.LOG_ACTION_TARGET_TITLE,
+				   log.LOG_ACTION_TARGET_VALUE,
+				   log.HISTORY_TITLE,
+				   log.HISTORY_DATA,
+				   log.COMMENT,
+				   log.LAST_INSERT_BATCH_ID,
+				   log.ACCOUNT_ID,
+				   log.NEW_VALUE,
+				   log.OLD_VALUE,
+				   log.UNDO_TEXT,
+				   st.UNDO_SERVICE,
+				   log.UNDO_SERVICE_PARAMS,
+				   st.HTTP_METHOD_TYPE,
+				   log.BULK_ACTION_ID,
+				   log.AMP_PROPERTY_ID,
+				   log.ACTION_LOG_HISTORY_DETAILS_ID
+				 from audit.ACTION_LOG_HISTORY log 
+				 	left join audit.ACTION_LOG_UNDO_SERVICE st on(log.ACTION_LOG_UNDO_SERVICE_ID = st.ID)
+				 	left join authentication.AMP_USER au on(log.AMP_USER_ID = au.ID)
+					LIMIT 10
+					OFFSET 10

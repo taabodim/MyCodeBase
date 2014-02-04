@@ -1,0 +1,139 @@
+Second Task UI
+
+commit is regarding tasks IM-31 , IM-34 , IM-35
+commit is regarding task IM-76 
+
+Classes you need to implement:
+- AMPClickFiltersActionsService
+- APIClickFiltersActionsService
+- ClickFiltersActionsProcessorImpl
+- ClickFiltersActionsProcessorUtils
+
+ClickStatusGroup Dao to get FilterGroup name
+
+
+https://localhost:8443/rest_services/amp/clickfilters/actions/edit/subj_rate
+
+whenever the apply to filterGroup is involved , we don't say the old value, because its change
+
+
+If click status id doesn't exist for filter id it means that the subj rate doesn't exist for that filter id . so you only need to add validation for this and you don't need to add the change part for this (done)
+
+for other parts you need to do both validation and change for the subjection rates
+
+take a look at filter groupings_proposed_28april in google docs , NOVEMBER 2013 UPDATES tab , to see the most updated mappings 
+between the filter id and click status ids
+
+
+in clickcache db , there is a table called click_status and click_Status_group and group_click_status that relates the both tables.
+
+this is the dao imll for click status ClickStatusDetailsDAOJDBCImpl
+
+SimpleClickStatus this is the object that model the click status
+
+protected boolean subjRateEnabled = false;  if its true , they are allowed to change subj rate if not throw the invalid request error to the UI
+
+
+Filters_V4  store info about filters
+Filters_Setting_V4 store info about subjection rate ===> dao class for this is ClickFiltersActionsDAOJDBCImpl  , complete this and write update and add for this dao.
+
+com.admarketplace.dao.clickFilters.common  has all the common dais for click status ….
+
+
+just make sure that front end pass you click status id and use that to find the filter id because we store filter id 
+
+
+first I have to start IM-35 then go to validation logic , IM-34
+
+
+
+comment is mandatory , if there is no comment , throw invalid request exception
+
+take a close look at this doc Click Filters Settings Implementation  in google docs
+
+
+
+
+
+
+
+vertical ---> ampax   , Traffic_Source store info about traffic sources in prod
+
+com.admarketplace.trafficsources.dao.ts.TrafficSourceDAOJdbcImpl reads traffic source from prod , its in a jar file ,  you need to get info from 
+traffic sources sub1 to sub4 based on the front end id that is passed to you and save it in  Filters_Setting_V4 table …
+
+
+ the filter id is found based on clickStatusId that UI will send you 
+
+these are the parameters that UI will send you 
+value: requried
+comment: required
+tsId: optional
+clickStatusId: optional (filter ID in UI)
+groupId: optional
+deviceTypeId: optional
+deviceGroupId: optional
+pubSubTypeId: optional (implementation type ID)
+thisFilterGroup: optional
+allSubs: optional
+asOverride: optional
+
+718 932 1510 elias
+
+once the subjection rate  they change a value, they cannot go back to empty
+it means if they pass me a null subj rate and I already have an int value, I throw a invalid request ( just throw when the value is outside 0-100 range)
+
+
+each time , if its a traffic source, you need to store  publisher id, sub1---sub4 and traffic source id 
+
+if we store some request and some of the above fields are empty just store them as 0 except advertiser field , so you store it as null
+
+
+
+those 3 options are in the Publishers View in UI only*(check boxes) we don't have that in Filter view
+
+
+Filter View ===> Filter Grid, Device Type , implementation Type
+
+Apply to this filter group:
+if they pass me this, i find the click status id and get all filters ( find the dao for this in the code)
+
+Apply to all Sub source:
+  Pub level: set new subjection rate to this pub and its all existing sub1 children and Sub 4 grandchildren.
+  Sub 1 level: set new subjection rate to this sub 1 and its all existing Sub 4 children.
+
+
+
+ if they pass a request without override, check priority in db and change it back to 0
+
+
+
+when you are throwing exception , use restValidationException …. and don't put stackTrace, make a readable error message
+
+I can get level from the traffic source Id , then we know 
+
+218917487
+
+commit is regarding these tasks in jira  IM-31 , IM-34 , IM-35
+
+When you update the subjection rate for any case, if there is no traffic source  entry in db, insert instead of update.
+
+if its a children and its not in db, don't insert and forget about it .
+
+Traffic_SOURCE ampx table in vertical
+
+// sub2 and sub3 are excluded from all kinds of updates in the db. if
+// the traffic source entry has the level 2 or 3
+// throw a validation exception
+// params.getGroupId()//this is the filter group id
+
+
+
+when you change priority to -9, only the parent priority should change 
+
+SQL ==> adminDB_Prod ==>FILTER_SETTING_V4
+SQL===>clickcache ===>CLICK_STATUS
+SQL===>clickcache ===>CLICK_STATUS_GROUP
+
+SQL===>audit====ACTION_LOG_HISTORY
+SQL===>audit====ACTION_LOG_HISTORY_DETAILS

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+      <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+               <layout class="org.apache.log4j.PatternLayout">
+               		<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %t %c{1}:%L - %m%n"/>
+                </layout>
+               <!-- <param name="Target" value="System.out"/> -->
+      </appender>
+      
+      <appender name="LOGFILE" class="org.apache.log4j.RollingFileAppender">
+       	<param name="file" value="/Users/AP0025/Documents/hadoop.log" /> 
+       	<param name="MaxFileSize" value="100MB"/>
+      	<param name="MaxBackupIndex" value="10" />
+      	<layout class="org.apache.log4j.PatternLayout">
+            <!-- <param name="ConversionPattern" value="%d{ABSOLUTE} %5p %t %c{1}:%L - %m%n"/> -->
+            <param name="ConversionPattern" value="%d{DATE} %5p [%x] %t %c{1}:%L - %m%n"/>            
+        </layout>
+      </appender>
+      
+      <logger name="com.admarketplace.isg" >
+             <level value="DEBUG" />
+                    <appender-ref ref="LOGFILE"/>
+                    <appender-ref ref="CONSOLE"/>
+      </logger>
+      
+   
+	  <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="LOGFILE"/>
+        <appender-ref ref="CONSOLE"/>
+      </root>
+</log4j:configuration>
