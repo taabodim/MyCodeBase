@@ -1,87 +1,118 @@
 package com.admarketplace.isg.interview.datastructures;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+
+
 import com.admarketplace.isg.util.Util;
 
+public class BinarySearchTree<T extends Comparable<T>> {
+	private BinaryNode<T> myRootNode;
 
-public class BinarySearchTree {
-	private static BinaryNode myRootNode = new BinaryNode(0);
-	public static void main(String[] args) {
-		BinarySearchTree myTree = new BinarySearchTree();
-		myTree.addNodes(12, 234, 45, 67, 34);
-		Util.echo("67 was found "+myRootNode.findValue(myRootNode, 67).getValue());
-		Util.echo("68 was NOT found "+myRootNode.findValue(myRootNode, 68).getValue());
-//		printTheTree(myRootNode);
-	}
-
-	private void addNodes(int... values) {
+	public void addNodes(Object[] values) {
 		for (int i = 0; i < values.length; i++) {
-			int value = values[i];
+			T value = (T)values[i];
 			this.addChildToTree(value);
 		}
 	}
 
-	private void addChildToTree(int value) {
-		myRootNode.insert(myRootNode, value);
-	}
-	
-	private static void printTheTree(BinaryNode myNode) {
-	    
-	    Util.echo("myNode value is "+myNode.getValue());
-		Util.echo(" left child value is "+ (myNode.leftNode!=null ? myNode.leftNode.getValue() : "empty"));
-		Util.echo(" right child value is "+(myNode.rightNode!=null ? myNode.rightNode.getValue() : "empty"));
-		if(myNode.leftNode!=null)
-	    	printTheTree(myNode.leftNode);
-	    if(myNode.rightNode!=null)
-	    	printTheTree(myNode.rightNode);
-	}
-	
-
-}
-
-class BinaryNode {
-	private Integer value;
-	public BinaryNode leftNode;
-	public BinaryNode rightNode;
-
-	public BinaryNode(Integer value) {
-
-		this.value = value;
-		this.leftNode = null;
-		this.rightNode = null;
+	private void addChildToTree(T value) {
+		insert(myRootNode, value);
 	}
 
-	public Integer getValue() {
-		return value;
+	private void printTheTree() {
+		printTree(myRootNode);
 	}
 
-	public void setValue(Integer value) {
-		this.value = value;
+	private void printTree(BinaryNode<T> myNode) {
+
+		Util.echo(myNode.toString());
+		if (myNode.leftNode != null)
+			printTree(myNode.leftNode);
+		if (myNode.rightNode != null)
+			printTree(myNode.rightNode);
 	}
 
-	public void insert(BinaryNode parentNode, int value) {
-
-		if (value < parentNode.getValue()) {
+	public void insert(BinaryNode<T> parentNode, T value) {
+		if (myRootNode == null) {
+			myRootNode = new BinaryNode<T>(value);
+			return;
+		}
+		if (value.compareTo(parentNode.getValue()) < 0) {
 			if (parentNode.leftNode == null)
-				parentNode.leftNode = new BinaryNode(value);
+				parentNode.leftNode = new BinaryNode<T>(value);
 			else
 				insert(parentNode.leftNode, value);
 		} else {
 			if (parentNode.rightNode == null)
-				parentNode.rightNode = new BinaryNode(value);
+				parentNode.rightNode = new BinaryNode<T>(value);
 			else
 				insert(parentNode.rightNode, value);
 		}
 
 	}
 
-	public BinaryNode findValue(BinaryNode parentNode, int value) {
-		if (parentNode != null && parentNode.getValue() == value)
+	public BinaryNode<T> findValue(T value) {
+		return findValue(myRootNode, value);
+	}
+
+	public BinaryNode<T> findValue(BinaryNode<T> parentNode, T value) {
+
+		if (parentNode != null && value.compareTo(parentNode.getValue()) == 0)
 			return parentNode;
-		else if (parentNode.leftNode != null && parentNode.leftNode.getValue() <= value)
+		else if (parentNode.leftNode != null && value.compareTo(parentNode.leftNode.getValue()) < 0)
 			findValue(parentNode.leftNode, value);
-		else if (parentNode.rightNode != null && parentNode.rightNode.getValue() >= value)
+		else if (parentNode.rightNode != null && value.compareTo(parentNode.rightNode.getValue()) > 0)
 			findValue(parentNode.rightNode, value);
 
 		return null;
+	}
+
+	public static void main(String[] args) {
+		BinarySearchTree<Integer> myTree = new BinarySearchTree<Integer>();
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		array.add(1);
+		array.add(2);
+		array.add(3);
+		array.add(4);
+		array.add(5);
+		array.add(6);
+		array.add(7);
+		array.add(8);
+		array.add(9);
+		array.add(10);
+		Collections.shuffle(array);
+		myTree.addNodes(array.toArray());
+		Util.echo("1 was found " + myTree.findValue(1));
+		Util.echo("20 was NOT found " + myTree.findValue(20));
+		myTree.printTheTree();
+	}
+
+}
+
+class BinaryNode<V extends Comparable<V>> {
+	private V value;
+	public BinaryNode<V> leftNode;
+	public BinaryNode<V> rightNode;
+
+	public BinaryNode(V value) {
+
+		this.value = value;
+		this.leftNode = null;
+		this.rightNode = null;
+	}
+
+	public V getValue() {
+		return value;
+	}
+
+	public void setValue(V value) {
+		this.value = value;
+	}
+
+	public String toString() {
+		return (leftNode != null ? leftNode.getValue() : "empty") + " ===> " + value + "   <=== "
+				+ (rightNode != null ? rightNode.getValue() : "empty");
 	}
 }
