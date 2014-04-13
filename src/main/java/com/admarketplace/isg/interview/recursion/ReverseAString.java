@@ -25,9 +25,9 @@ public class ReverseAString {
 	private static String fetchLastCharAndAppend(String myStr) {
 		if(myStr.length()>0)
 		{
-			char temp = myStr.charAt(myStr.length()-1);
-			String newString = myStr.substring(0,myStr.length()-1);
-			return temp+fetchLastCharAndAppend(newString);
+			char lastCharacter = myStr.charAt(myStr.length()-1);
+			String newStringMinusLastChar = myStr.substring(0,myStr.length()-1);
+			return lastCharacter+fetchLastCharAndAppend(newStringMinusLastChar);
 		}
 		else return "";
 	}
